@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Project-specific
+data/
+load-testing/logs/
+load-testing/results/
