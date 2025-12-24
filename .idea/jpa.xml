@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpaBuddyIdeaProjectConfig">
+    <option name="reLastEntityCreationPackage" value="account-service/src/main/java/com/motaz/accountservice/model" />
+    <option name="reverseEngineeringLastDbConnectionId" value="c0e4b752-a7c5-40de-b6d8-642b50463dca__account_db_public" />
+  </component>
+</project>

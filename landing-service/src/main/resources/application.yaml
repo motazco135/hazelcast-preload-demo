@@ -1,0 +1,72 @@
+server:
+  port: 9084
+spring:
+  application:
+    name: landing-service
+  hazelcast:
+    config: classpath:/hazelcast.yaml
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    enabled: true
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/ods_db?reWriteBatchedInserts=true}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 20000 #maximum number of milliseconds that a client will wait for a connection
+      minimum-idle: 3 #minimum number of idle connections maintained by HikariCP in a connection pool
+      maximum-pool-size: 5 #maximum pool size
+      max-lifetime: 800000   # maximum lifetime in milliseconds of a connection in the pool after it is closed.
+  jpa:
+    defer-datasource-initialization: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        generate_statistics: true
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 20
+        format_sql: true
+        jdbc:
+          batch_size: 1000
+          order_inserts: true
+    open-in-view: false
+  sql:
+    init:
+      mode: never
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      listener:
+        ack-mode: manual
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+      customer-profile:
+        topic: customer.profile.v1
+        group-id: landing-service.customer.profile
+      customer-account:
+        topic: customer.accounts.v1
+        group-id: landing-service.customer.accounts
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+hazelcast-map:
+  ods: landing-map
+
+external-services:
+  profile-service: ${PROFILE_SERVICE_URL:http://localhost:9081}
+  account-service: ${ACCOUNT_SERVICE_URL:http://localhost:9083}
